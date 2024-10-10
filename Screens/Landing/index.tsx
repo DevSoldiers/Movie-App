@@ -1,71 +1,34 @@
 import InstantGamesCard from "@/components/cards/instantGamesCard";
+import MovieCard from "@/components/cards/lotteryCards";
 import LotteryCard from "@/components/cards/lotteryCards";
-import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-  ScrollView,
-} from "react-native";
-
-const logo = require("../../assets/images/NLSforWhite.png");
-
-const lotteries = [
-  require("../../assets/images/lotto.png"),
-  require("../../assets/images/lotto2.png"),
-  require("../../assets/images/lotto3.png"),
-  require("../../assets/images/lotto4.png"),
-];
-const instantGames = [
-  {
-    image: require("../../assets/images/instanticons/almazicon.png"),
-    game: "አልማዝ",
-  },
-  {
-    image: require("../../assets/images/instanticons/yegenzebkeretit.png"),
-    game: "የገንዘብ ከረጢት",
-  },
-  {
-    image: require("../../assets/images/instanticons/yekutrchewata.png"),
-    game: "የቁጥር ጨዋታ",
-  },
-  {
-    image: require("../../assets/images/instanticons/yemisilchewata.png"),
-    game: "የምስል ጨዋታ",
-  },
-];
+import useMoviesStore from "@/store/movieStore";
+import React, { useEffect } from "react";
+import { StyleSheet, Text, View, FlatList, ScrollView } from "react-native";
 
 const LandingScreen = () => {
-  const renderItem = ({ item }: any) => <LotteryCard item={item} />;
-  const instantGamesItem = ({ item }: any) => <InstantGamesCard item={item} />;
+  const { data, error, fetchData, loading } = useMoviesStore();
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const renderItem = ({ item }: any) => <MovieCard item={item} />;
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Image source={logo} style={styles.image} />
-        <Text style={[styles.textStyle, { marginTop: 5 }]}>Lotteries</Text>
-        <Text style={styles.subTextStyle}>
-          Luck Favors the Bold! Are You Ready?
-        </Text>
+        <Text style={styles.subTextStyle}>Popular Movies</Text>
 
         <FlatList
-          data={lotteries}
+          data={data}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
         />
         <View style={{ marginVertical: 10 }}></View>
-        <Text style={[styles.textStyle, { marginTop: 5 }]}>
-          Play Instant Games
-        </Text>
-        <Text style={styles.subTextStyle}>
-          You Can't Win if You Don't Play!
-        </Text>
+        <Text style={styles.subTextStyle}>Shows You Might Like</Text>
         <FlatList
-          data={instantGames}
-          renderItem={instantGamesItem}
+          data={data?.slice(30, 40)}
+          renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -90,10 +53,10 @@ const styles = StyleSheet.create({
     fontSize: 28,
   },
   subTextStyle: {
-    fontWeight: "400",
+    fontWeight: "900",
     marginVertical: 5,
     letterSpacing: 2,
-    fontSize: 14,
+    fontSize: 20,
   },
 });
 

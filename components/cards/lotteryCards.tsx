@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { movie } from "@/types/movieType";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
@@ -10,19 +11,19 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const LotteryCard = ({ item }: any) => {
+const MovieCard = ({ item }: { item: movie }) => {
   const router = useRouter();
   return (
     <TouchableOpacity
       onPress={() => {
-        router.push({ pathname: "/(stack)/detail", params: item });
+        router.push({ pathname: "/(stack)/detail" });
       }}
     >
       <View style={styles.imageContainer}>
-        <Text style={styles.headerText}>Gena</Text>
-        <Image source={item} style={styles.lotteryImage} />
-        <Text style={styles.priceText}>10Birr</Text>
-        <Text style={styles.winText}>Win 100,000 birr</Text>
+        <Image
+          source={{ uri: item.image.original }}
+          style={styles.lotteryImage}
+        />
       </View>
     </TouchableOpacity>
   );
@@ -35,10 +36,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   lotteryImage: {
-    width: Dimensions.get("screen").width - 50,
+    width: Dimensions.get("screen").width / 2.5,
     height: 220,
     marginRight: 10,
-    resizeMode: "contain",
+    backgroundColor: "gray",
+    borderRadius: 10,
   },
   headerText: {
     position: "absolute",
@@ -66,8 +68,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     bottom: 15,
     textAlign: "center",
-    width: Dimensions.get("screen").width - 50,
+    width: Dimensions.get("screen").width / 2,
   },
 });
 
-export default LotteryCard;
+export default MovieCard;
